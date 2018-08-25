@@ -66,13 +66,14 @@ public:
         return 0;
     }
     void action(char c, int StreamStrength) {
-        printf("%s %d %s", "*** Stream strength is ", StreamStrength, " ");
+        printf("%s %c %s", "You chosed '", c, "' \n");
+        printf("%s %d %s", "Stream strength is", StreamStrength, " ");
         if (EnemyHP > 0) {
             printf("%s %d %s", "Your Hp = ", hp, " ");
             printf("%s %d %s", "Enemy Hp = ", EnemyHP, " ");
         }
-        printf("%s %d %s", "distance = ", distance, " ");
-        printf("%s %c %s", "You chosed '", c, "' ***\n");
+        printf("%s %d %s", "distance = ", distance, " \n");
+
         if (c == 'a' || c == 'A') {
             if (stamina < 2) {
                 printf("%s", "You need a rest, good luck!");
@@ -118,6 +119,13 @@ public:
             printf("%s %d %s", "stamina = ", stamina, " ");
             printf("%s %d %s", "distance = ", distance, "\n");
         }
+        else {
+            printf("%s", "You failed in typing right command, try again.{s,r,a}\n");
+            while(c != 's' && c!= 'r' && c!= 'a'){
+                cin >> c;
+            }
+            action(c,StreamStrength);
+        }
         printf("%s", "\n");
     };
 
@@ -127,12 +135,13 @@ public:
 
 int main() {
     setlocale(LC_ALL, "RU");
+    int place = 0;
     srand(time(NULL));
-    cout << "Welcome, to my game called river challange\n";
+    cout << "Welcome, to my game called river challenge\n";
     printf("%s", "In this game you will be given one or few canoe riders,\n");
     printf("%s", "your GREAT MISSION to have them reach the End of the river.\n");
     printf("%s", "That is easy, or not ?....\n");
-    printf("%s", "Lets Start with chosing number of players, u can insert any number from 1 to 10, or '0' to generate randomly\n");
+    printf("%s", "Lets Start with choosing number of players, u can insert any number from 1 to 10, or '0' to generate randomly\n");
     int c = 0;
     scanf("%d", &c);
     while(c>10 || c<0){
@@ -178,6 +187,7 @@ int main() {
             printf("%s %d %s", "Stamina =", stamina_, " ");
             printf("%s %d %s", "distance =", distance_, " ");
             printf("%s %*d %s", "End of the river on", -3, end, "##\n");// instead of -3 use some variable
+            printf("%s %d %s", "## Stream strength =", StreamStrength, "##\n");
             if (chance < 1){
                 player[i]->setEnemyHp(player[i]->get(3) + 1);
                 printf("%s %s","\n", ">>>*Dramatic worrying music starts* Crocodile bite your arm!<<<\n");
@@ -219,7 +229,7 @@ int main() {
                     player[i]->action(c, StreamStrength);
 
             }
-            if (player[i]->get(2) >= end && !PlayerFinished[i]) { PlayerFinished[i] = true; printf("%s %d %s %d %s", "Player",i+1,"FINISHED on", 1 + finished + DeadRiverChallengers, "place\n"); }
+            if (player[i]->get(2) >= end && !PlayerFinished[i]) { PlayerFinished[i] = true; printf("%s %d %s %d %s", "Player",i+1,"FINISHED on", place++, "place\n"); }
         }
         turn++;
     }
@@ -231,4 +241,4 @@ int main() {
 //
 //
 //
-//version 0.31
+//version 0.4

@@ -224,16 +224,13 @@ int main() {
                     else if(ViewMessage == 1){ printf("%s", "Sun covered with clouds made landscape gone faded.\n"); }
                     else if (ViewMessage == 2) { printf("%s", "Really big shiny carp jumped in the air right near you.\n"); }
                     else if (ViewMessage == 3) { printf("%s", "Sun is smiles through small space betwen few clouds.\n"); }
-
                 }
                     player[i]->action(c, StreamStrength);
-
             }
             if (player[i]->get(2) >= end && !PlayerFinished[i]) { PlayerFinished[i] = true; printf("%s %d %s %d %s", "Player",i+1,"FINISHED on", place++, "place\n"); }
         }
         turn++;
     }
-    //printf("", "");
     return 0;
 }
 //
@@ -241,4 +238,4 @@ int main() {
 //
 //
 //
-//version 0.4
+//version 0.41

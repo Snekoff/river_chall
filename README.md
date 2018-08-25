@@ -1,3 +1,3 @@
 # canoe riders vs river
 Mini game with canoe riders and river challange.
-version 0.35
+version 0.331

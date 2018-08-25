@@ -63,6 +63,7 @@ public:
         else if (a == 3) {
             return EnemyHP;
         }
+        return 0;
     }
     void action(char c, int StreamStrength) {
         printf("%s %d %s", "*** Stream strength is ", StreamStrength, " ");

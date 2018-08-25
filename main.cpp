@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <string>
 #include <vector>
@@ -6,7 +7,6 @@
 #include <malloc.h>
 #include <time.h>
 #include <clocale>
-
 using namespace std;
 
 class canoe_rider {
@@ -132,61 +132,57 @@ int main() {
     printf("%s", "In this game you will be given one or few canoe riders,\n");
     printf("%s", "your GREAT MISSION to have them reach the End of the river.\n");
     printf("%s", "That is easy, or not ?....\n");
-    int c = 3;
+    printf("%s", "Lets Start with chosing number of players, u can insert any number from 1 to 10, or '0' to generate randomly\n");
+    int c = 0;
+    scanf("%d", &c);
+    while(c>10 || c<0){
+        printf("%s", "Try another number (from 0 to 10)\n");
+        scanf("%d", &c);
+    }
+    if(c == 0){
+        c = rand() %10 +1;
+        printf("%d \n",c);
+    }
     int DeadRiverChallengers = 0;
-    /*c = rand() % 4 + 1;
-    for (int i = 0; i < c; i++) {
+    canoe_rider* player[10];
+    for(int i = 0; i < c;i++){
+        player[i] = new canoe_rider(rand() % 10 + 2, rand() % 100 + 10);
+    }
 
-    }*/
-
-    canoe_rider playerOne(rand() % 10 + 1, rand() % 100 + 1);
+    /*canoe_rider playerOne(rand() % 10 + 1, rand() % 100 + 1);
     canoe_rider playerTwo(rand() % 10 + 1, rand() % 100 + 1);
-    canoe_rider playerThr(rand() % 10 + 1, rand() % 100 + 1);
+    canoe_rider playerThr(rand() % 10 + 1, rand() % 100 + 1);*/
     int end = rand() %10 +1;
-    int StreamStrength = rand() % 10 + 1;
+    int StreamStrength = rand() % 9 + 1;
     int turn = 1;
-    bool playerOneFinished = false, playerTwoFinished = false, playerThrFinished = false;
-    while(!playerOneFinished || !playerTwoFinished || !playerThrFinished) {
+    bool PlayerFinished[10] = {false};
+    bool GamesDone = false;
+    while(!GamesDone) {
         printf("%s %d %s", "Turn ", turn, "\n");
-        for (int i = 1; i <= c; i++) {
-            if (i == 1 && playerOneFinished) { continue; } // distance
-            if (i == 2 && playerTwoFinished) { continue; }
-            if (i == 3 && playerThrFinished) { continue; }
+        for (int i = 0; i < c; i++) {
+            int finished = 0;
+            for(int j = 0; j < c;j++){
+                if(PlayerFinished[i])finished++;
+            }
+            if(finished == c){GamesDone = true; break;}
             int chance = rand() % 10;
             int hp_, stamina_, distance_;
-            if (i == 1) {
-                hp_ = playerOne.get(0);
-                if (hp_ < 1) { printf("%s", "Rest in peace, player 0ne.\n"); DeadRiverChallengers--; playerOneFinished = true; continue; }
-                stamina_ = playerOne.get(1);
-                distance_ = playerOne.get(2);
-                if (chance < 1) playerOne.setEnemyHp(playerOne.get(3) + 1);
-            }
-            else if (i == 2) {
-                hp_ = playerTwo.get(0);
-                if (hp_ < 1) { printf("%s", "Rest in peace, player Two.\n"); DeadRiverChallengers--; playerTwoFinished = true; continue; }
-                stamina_ = playerTwo.get(1);
-                distance_ = playerTwo.get(2);
-                if (chance < 1) playerTwo.setEnemyHp(playerTwo.get(3) + 1);
-            }
-            else if (i == 3) {
-                hp_ = playerThr.get(0);
-                if (hp_ < 1) { printf("%s", "Rest in peace, player tHree.\n"); DeadRiverChallengers--; playerThrFinished = true; continue; }
-                stamina_ = playerThr.get(1);
-                distance_ = playerThr.get(2);
-                if (chance < 1) playerThr.setEnemyHp(playerThr.get(3) + 1);
-            }
-            printf("%s %d %s", "######################  Player", i, "`s turn:  ######################\n");
+            hp_ = player[i]->get(0);
+            if (hp_ < 1) { printf("%s %d \n", "Rest in peace, player",i); DeadRiverChallengers--; PlayerFinished[i] = true; continue; }
+            stamina_ = player[i]->get(1);
+            distance_ = player[i]->get(2);
+
+
+            printf("%s %d %s", "######################  Player", i+1, "`s turn:  ######################\n");
             printf("%s %d %s", "## Hp =", hp_, " ");
             printf("%s %d %s", "Stamina =", stamina_, " ");
             printf("%s %d %s", "distance =", distance_, " ");
             printf("%s %*d %s", "End of the river on", -3, end, "##\n");// instead of -3 use some variable
-
-            if(i == 1){if(playerOne.get(3) > 0) printf("%s %d %s", "-> Enemy hp =", playerOne.get(3), " \n");}
-            else if(i == 2){ if (playerTwo.get(3) > 0) printf("%s %d %s", "-> Enemy hp =", playerTwo.get(3), " \n"); }
-            else if(i == 3){ if (playerThr.get(3) > 0) printf("%s %d %s", "-> Enemy hp =", playerThr.get(3), " \n"); }
-
-            if(chance < 1) printf("%s %s %s","\n", ">>>*Dramatic worrying music starts* Crocodile bite your arm!<<<\n", "\n");
-
+            if (chance < 1){
+                player[i]->setEnemyHp(player[i]->get(3) + 1);
+                printf("%s %s","\n", ">>>*Dramatic worrying music starts* Crocodile bite your arm!<<<\n");
+                printf("%s %d %s", ">>> Enemy hp =", player[i]->get(3), " \n");
+            }
             printf("%s", "## type 's' to swim, type 'r' to rest, type 'a' to atack       ##\n");
             printf("%s", "#################################################################\n");
             char c;
@@ -196,42 +192,17 @@ int main() {
                 printf("%s", "Game won`t proceed until you type valid key\n");
                 cin >> c;
             }
-
             if (chance < 1) {
-
-                if (i == 1) {
-                    if (playerOne.get(0) - 1 < 1) {
-                        printf("%s", "Rest in peace, player One.\n");
+                    if (player[i]->get(0) - 1 < 1) {
+                        printf("%s %d \n", "Rest in peace, player",i+1);
                         DeadRiverChallengers--;
-                        playerOneFinished = true;
+                        PlayerFinished[i] = true;
                         continue;
                     }
                     else {
-                        playerOne.set(playerOne.get(0) - 1, playerOne.get(1));
-                        playerOne.action(c, StreamStrength);
+                        player[i]->set(player[i]->get(0) - 1, player[i]->get(1));
+                        player[i]->action(c, StreamStrength);
                     }
-                }
-                else if (i == 2) {
-                    if (playerTwo.get(0) - 1 < 1) {
-                        printf("%s", "Rest in peace, player two.\n");
-                        DeadRiverChallengers--;
-                        playerTwoFinished = true;
-                        continue;
-                    }
-                    else { playerTwo.set(playerTwo.get(0) - 1, playerTwo.get(1));
-                        playerTwo.action(c, StreamStrength); }
-                }
-                else if (i == 3) {
-                    if (playerThr.get(0) - 1 < 1) {
-                        printf("%s", "Rest in peace, player three.\n");
-                        DeadRiverChallengers--;
-                        playerThrFinished = true;
-                        continue;
-                    }
-                    else { playerThr.set(playerThr.get(0) - 1, playerThr.get(1));
-                        playerThr.action(c, StreamStrength); }
-                }
-
             }
             else {
                 if (turn == 1) {
@@ -245,22 +216,10 @@ int main() {
                     else if (ViewMessage == 3) { printf("%s", "Sun is smiles through small space betwen few clouds.\n"); }
 
                 }
-                if (i == 1) {
-                    playerOne.action(c, StreamStrength);
-                }
-                else if (i == 2) {
-                    playerTwo.action(c, StreamStrength);
-                }
-                else if (i == 3) {
-                    playerThr.action(c, StreamStrength);
-                }
+                    player[i]->action(c, StreamStrength);
 
             }
-            if (playerOne.get(2) >= end && !playerOneFinished) { playerOneFinished = true; printf("%s %d %s", "Player One FINISHED on", playerOneFinished + playerTwoFinished + playerThrFinished + DeadRiverChallengers, "place\n"); }
-            if (playerTwo.get(2) >= end && !playerTwoFinished) { playerTwoFinished = true; printf("%s %d %s", "Player Two FINISHED on", playerOneFinished + playerTwoFinished + playerThrFinished + DeadRiverChallengers, "place\n"); }
-            if (playerThr.get(2) >= end && !playerThrFinished) {
-                playerThrFinished = true; printf("%s %d %s", "Player Three FINISHED on", playerOneFinished + playerTwoFinished + playerThrFinished + DeadRiverChallengers, "place\n");
-            }
+            if (player[i]->get(2) >= end && !PlayerFinished[i]) { PlayerFinished[i] = true; printf("%s %d %s %d %s", "Player",i+1,"FINISHED on", 1 + finished + DeadRiverChallengers, "place\n"); }
         }
         turn++;
     }

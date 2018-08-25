@@ -199,8 +199,8 @@ int main() {
             if (chance < 1){
                 player[i]->setEnemyHp(player[i]->get(3) + 1);
                 printf("%s %s","\n", ">>>*Dramatic worrying music starts* Crocodile bite your arm!<<<\n");
-                printf("%s %d %s", ">>> Enemy hp =", player[i]->get(3), " \n");
             }
+            if(player[i]->get(3) > 0) printf("%s %d %s", ">>> Enemy hp =", player[i]->get(3), " \n");
             printf("%s", "## type 's' to swim, type 'r' to rest, type 'a' to atack       ##\n");
             printf("%s", "#################################################################\n");
             char c;

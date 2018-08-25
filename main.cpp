@@ -17,12 +17,14 @@ private:
     int MaxStamina;
     int distance;
     int EnemyHP;
+    int place;
 public:
     canoe_rider (int a, int b) {
         distance = 0;
         MaxHp = a;
         EnemyHP = 0;
         MaxStamina = b;
+        place = 0;
         set(a, b);
     };
     void set(int a, int b) {
@@ -62,6 +64,9 @@ public:
         }
         else if (a == 3) {
             return EnemyHP;
+        }
+        else if(a == 4){
+            return place;
         }
         return 0;
     }
@@ -128,6 +133,7 @@ public:
         }
         printf("%s", "\n");
     };
+    void setPlace(int Place){place = Place;}
 
     ~canoe_rider() {};
 
@@ -167,13 +173,22 @@ int main() {
         for (int i = 0; i < c; i++) {
             int finished = 0;
             for(int j = 0; j < c;j++){
-                if(PlayerFinished[i])finished++;
+                if(PlayerFinished[j])finished++;
             }
-            if(finished == c){GamesDone = true; break;}
+            if(finished == c){GamesDone = true;
+            printf("%s %d \n", "Game ended on turn", turn - 1);
+            printf("%s \n", "Places are:");
+            for(int j = 0; j < c;j++){
+                if(player[j]->get(4) > 0) printf("%s %d %s %d %s \n", "Player", j+1, "on",player[j]->get(4),"place");
+                else{printf("%s %d %s \n", "Player", j+1, "Dead");}
+            }
+            break;
+            }
+            if(PlayerFinished[i])continue;
             int chance = rand() % 10;
             int hp_, stamina_, distance_;
             hp_ = player[i]->get(0);
-            if (hp_ < 1) { printf("%s %d \n", "Rest in peace, player",i+1); DeadRiverChallengers--; PlayerFinished[i] = true; continue; }
+            if (hp_ < 1) { printf("%s %d \n", "Rest in peace, player",i); DeadRiverChallengers--; PlayerFinished[i] = true; continue; }
             stamina_ = player[i]->get(1);
             distance_ = player[i]->get(2);
 
@@ -223,7 +238,7 @@ int main() {
                 }
                     player[i]->action(c, StreamStrength);
             }
-            if (player[i]->get(2) >= end && !PlayerFinished[i]) { PlayerFinished[i] = true; printf("%s %d %s %d %s", "Player",i+1,"FINISHED on", place++, "place\n"); }
+            if (player[i]->get(2) >= end && !PlayerFinished[i]) { PlayerFinished[i] = true; printf("%s %d %s %d %s", "Player",i+1,"FINISHED on", place++, "place\n"); player[i]->setPlace(place); }
         }
         turn++;
     }
@@ -234,4 +249,4 @@ int main() {
 //
 //
 //
-//version 0.41
+//version 0.51

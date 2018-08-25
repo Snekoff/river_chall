@@ -134,11 +134,8 @@ public:
         printf("%s", "\n");
     };
     void setPlace(int Place){place = Place;}
-
     ~canoe_rider() {};
-
 };
-
 int main() {
     setlocale(LC_ALL, "RU");
     int place = 0;
